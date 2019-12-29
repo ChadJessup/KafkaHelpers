@@ -18,6 +18,10 @@ Thankfully Confluent is very conscientious of breaking APIs, delays will hopeful
 * TODO: ```KafkaHelpers.Tests.*```: Tests, and test helpers. These would be a good place to start when figuring out how to use the helpers if the documentation isn't enough.
   * TODO: ```KafkaHelpers.Tests.Helpers```: This library can be independently consumed to help with writing unit tests in other projects.
 
+### Potential Features/Libraries
+
+* AspnetCore HealthCheck for Kafka Cluster and/or topic lag
+
 ## Dependency Injection
 
 Due to the builder pattern used to instantiate Kafka Clients, there can be difficulties injecting Kafka clients into dependent classes.
