@@ -1,6 +1,7 @@
 ﻿using KafkaHelpers.Web.App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace KafkaHelpers.Web.App.Controllers
@@ -11,14 +12,31 @@ namespace KafkaHelpers.Web.App.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
+        private readonly IOptions<TestOptions> options;
+        private readonly TestConsumer consumer;
+        private readonly TestProducer producer;
+        private readonly TestAdmin admin;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
         /// </summary>
+        /// <param name="options"></param>
         /// <param name="logger">The logger.</param>
-        public HomeController(ILogger<HomeController> logger)
+        /// <param name="consumer"></param>
+        /// <param name="producer"></param>
+        /// <param name="admin"></param>
+        public HomeController(
+            IOptions<TestOptions> options,
+            ILogger<HomeController> logger,
+            TestConsumer consumer,
+            TestProducer producer,
+            TestAdmin admin)
         {
             this.logger = logger;
+            this.options = options;
+            this.consumer = consumer;
+            this.producer = producer;
+            this.admin = admin;
 
             this.logger.LogDebug($"{nameof(HomeController)}: Was initialized.");
         }

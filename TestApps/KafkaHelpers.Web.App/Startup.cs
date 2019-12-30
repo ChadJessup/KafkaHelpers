@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using KafkaHelpers.AspnetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,14 +32,26 @@ namespace KafkaHelpers.Web.App
         /// <param name="services">DI Container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews();
+
+            services
+                .AddLogging()
+                .AddOptions();
+
+            services
+                .AddKafkaHelpers()
+                .AddKafkaConfiguration<StandardProducerConfig>()
+                .AddKafkaProducer<TestProducer>()
+                .AddKafkaConsumer<TestConsumer>()
+                .AddKafkaAdminClient<TestAdmin>();
         }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
+        /// <param name="app">The application builder.</param>
+        /// <param name="env">The environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -53,6 +62,7 @@ namespace KafkaHelpers.Web.App
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
 
             app.UseRouting();

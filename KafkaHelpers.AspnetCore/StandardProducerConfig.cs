@@ -1,11 +1,12 @@
 ﻿using System;
+using Confluent.Kafka;
 
 namespace KafkaHelpers.AspnetCore
 {
     /// <summary>
     /// temp
     /// </summary>
-    public class Class1
+    public class StandardProducerConfig : ProducerConfig
     {
     }
 }

@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace KafkaHelpers.Web.App
 {
@@ -11,7 +12,7 @@ namespace KafkaHelpers.Web.App
         /// <summary>
         /// Main entry point to the application.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Startup arguments passed into the application.</param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args)
