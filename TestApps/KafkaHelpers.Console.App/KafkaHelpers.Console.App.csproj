@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\KafkaHelpers.AspnetCore\KafkaHelpers.AspnetCore.csproj" />
+    <ProjectReference Include="..\..\KafkaHelpers.Core\KafkaHelpers.Core.csproj" />
+    <ProjectReference Include="..\..\KafkaHelpers.DotnetCore\KafkaHelpers.DotnetCore.csproj" />
+  </ItemGroup>
+
+</Project>

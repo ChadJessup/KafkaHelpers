@@ -26,7 +26,7 @@ Thankfully Confluent is very conscientious of breaking APIs, delays will hopeful
 
 Due to the builder pattern used to instantiate Kafka Clients, there can be difficulties injecting Kafka clients into dependent classes.
 
-The ```KafkaHelpers.Core.DependencyInjection``` namespace contains client wrapping classes which can be derived from to allow dependency injection using the standard ```Microsoft.Extensions.DependencyInjection``` mechanisms. Essentially, typed clients.
+The ```KafkaHelpers.Core.Clients``` namespace contains client wrapping classes which can be derived from, to allow dependency injection using the standard ```Microsoft.Extensions.DependencyInjection``` mechanisms. Essentially, typed clients.
 Other DI containers should be allowable as well, but that is left up to the reader.
 
 ### Usage
