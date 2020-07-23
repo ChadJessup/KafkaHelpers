@@ -20,6 +20,8 @@ namespace KafkaHelpers.Core.Clients
         public Handle Handle => this.consumer.Handle;
         public string Name => this.consumer.Name;
 
+        public IConsumerGroupMetadata ConsumerGroupMetadata => consumer.ConsumerGroupMetadata;
+
         public int AddBrokers(string brokers)
         {
             return this.consumer.AddBrokers(brokers);
@@ -177,6 +179,16 @@ namespace KafkaHelpers.Core.Clients
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public ConsumeResult<TKey, TValue> Consume(int millisecondsTimeout)
+        {
+            return consumer.Consume(millisecondsTimeout);
+        }
+
+        public List<TopicPartitionOffset> Committed(TimeSpan timeout)
+        {
+            return consumer.Committed(timeout);
         }
     }
 }

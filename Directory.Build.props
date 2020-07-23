@@ -1,58 +1,16 @@
 <Project>
 
-  <!-- Apply same version to all projects automatically.-->
-  <!-- If a project needs to have a different version, add in csproj directly. -->
-  <PropertyGroup>
-    <Version>0.0.1</Version>
-  </PropertyGroup>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    <Authors>Chad Jessup</Authors>
-    <Company>Good Enough Industries</Company>
-    <Product>$(ProjectName)</Product>
     <RepositoryUrl>https://github.com/ChadJessup/KafkaHelpers/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ChadJessup/KafkaHelpers/</PackageProjectUrl>
     <PackageTags>kafka confluent-kafka-dotnet kafkahelpers aspnetcore dotnetcore</PackageTags>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-musl-x64;linux-arm;win-arm;win-arm64</RuntimeIdentifiers>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <LangVersion>8.0</LangVersion>
-    <Deterministic>true</Deterministic>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <NoWarn>CA1710</NoWarn>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
 
-  <!-- These packages are automatically added to any csproj in this directory tree. -->
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <!-- Github Sourcelink values -->
-  <PropertyGroup>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-
-  <!-- Apply any suppressions to all projects. -->
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)\GlobalCode\GlobalSuppressions.cs" />
-  </ItemGroup>
 </Project>

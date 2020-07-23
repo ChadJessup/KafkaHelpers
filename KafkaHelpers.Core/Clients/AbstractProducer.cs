@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
@@ -92,6 +93,41 @@ namespace KafkaHelpers.Core.Clients
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public Task<DeliveryResult<TKey, TValue>> ProduceAsync(string topic, Message<TKey, TValue> message, CancellationToken cancellationToken = default)
+        {
+            return InnerProducer.ProduceAsync(topic, message, cancellationToken);
+        }
+
+        public Task<DeliveryResult<TKey, TValue>> ProduceAsync(TopicPartition topicPartition, Message<TKey, TValue> message, CancellationToken cancellationToken = default)
+        {
+            return InnerProducer.ProduceAsync(topicPartition, message, cancellationToken);
+        }
+
+        public void InitTransactions(TimeSpan timeout)
+        {
+            InnerProducer.InitTransactions(timeout);
+        }
+
+        public void BeginTransaction()
+        {
+            InnerProducer.BeginTransaction();
+        }
+
+        public void CommitTransaction(TimeSpan timeout)
+        {
+            InnerProducer.CommitTransaction(timeout);
+        }
+
+        public void AbortTransaction(TimeSpan timeout)
+        {
+            InnerProducer.AbortTransaction(timeout);
+        }
+
+        public void SendOffsetsToTransaction(IEnumerable<TopicPartitionOffset> offsets, IConsumerGroupMetadata groupMetadata, TimeSpan timeout)
+        {
+            InnerProducer.SendOffsetsToTransaction(offsets, groupMetadata, timeout);
         }
     }
 }

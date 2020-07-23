@@ -15,7 +15,7 @@ namespace KafkaHelpers.AspnetCore
             this.configuration = configuration;
         }
 
-        public void Parse<TClient>(KafkaHelpersOptions options)
+        public void Parse(KafkaHelpersOptions options)
         {
             if (options is null)
             {
@@ -29,7 +29,7 @@ namespace KafkaHelpers.AspnetCore
         private void ParseDefaultSection(KafkaHelpersOptions options)
         {
             var defaults = this.configuration.GetSection($"KafkaHelpers:{nameof(KafkaHelpersOptions.Configs)}:{nameof(KafkaHelpersConfigsOptions.Defaults)}");
-            
+
             var defaultProducerSection = defaults.GetSection("Producer");
 
             foreach (var defaultProducerValue in defaultProducerSection.AsEnumerable(makePathsRelative: true))
