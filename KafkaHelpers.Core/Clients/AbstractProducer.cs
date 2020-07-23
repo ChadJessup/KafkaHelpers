@@ -11,49 +11,53 @@ namespace KafkaHelpers.Core.Clients
 
     public abstract class AbstractProducer<TKey, TValue> : AbstractProducer, IProducer<TKey, TValue>
     {
-        private readonly IProducer<TKey, TValue> producer;
+        protected AbstractProducer(ProducerBuilder<TKey, TValue> builder)
+        {
+        }
 
-        public Handle Handle => producer.Handle;
-        public string Name => producer.Name;
+        protected readonly IProducer<TKey, TValue> InnerProducer;
+
+        public Handle Handle => InnerProducer.Handle;
+        public string Name => InnerProducer.Name;
 
         public int AddBrokers(string brokers)
         {
-            return this.producer.AddBrokers(brokers);
+            return this.InnerProducer.AddBrokers(brokers);
         }
 
         public int Flush(TimeSpan timeout)
         {
-            return this.producer.Flush(timeout);
+            return this.InnerProducer.Flush(timeout);
         }
 
         public void Flush(CancellationToken cancellationToken = default)
         {
-            this.producer.Flush(cancellationToken);
+            this.InnerProducer.Flush(cancellationToken);
         }
 
         public int Poll(TimeSpan timeout)
         {
-            return this.producer.Poll(timeout);
+            return this.InnerProducer.Poll(timeout);
         }
 
         public void Produce(string topic, Message<TKey, TValue> message, Action<DeliveryReport<TKey, TValue>>? deliveryHandler = null)
         {
-            this.producer.Produce(topic, message, deliveryHandler);
+            this.InnerProducer.Produce(topic, message, deliveryHandler);
         }
 
         public void Produce(TopicPartition topicPartition, Message<TKey, TValue> message, Action<DeliveryReport<TKey, TValue>>? deliveryHandler = null)
         {
-            producer.Produce(topicPartition, message, deliveryHandler);
+            this.InnerProducer.Produce(topicPartition, message, deliveryHandler);
         }
 
         public Task<DeliveryResult<TKey, TValue>> ProduceAsync(string topic, Message<TKey, TValue> message)
         {
-            return producer.ProduceAsync(topic, message);
+            return this.InnerProducer.ProduceAsync(topic, message);
         }
 
         public Task<DeliveryResult<TKey, TValue>> ProduceAsync(TopicPartition topicPartition, Message<TKey, TValue> message)
         {
-            return producer.ProduceAsync(topicPartition, message);
+            return this.InnerProducer.ProduceAsync(topicPartition, message);
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -65,7 +69,7 @@ namespace KafkaHelpers.Core.Clients
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    this.producer?.Dispose();
+                    this.InnerProducer?.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

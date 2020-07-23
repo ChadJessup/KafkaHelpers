@@ -43,6 +43,7 @@ namespace KafkaHelpers.Web.App
                 .AddKafkaHelpers()
                 .AddKafkaConfiguration<StandardProducerConfig>()
                 .AddKafkaProducer<TestProducer>()
+                .AddKafkaProducer<TestProducer, StandardProducerConfig>()
                 .AddKafkaConsumer<TestConsumer>()
                 .AddKafkaAdminClient<TestAdmin>();
         }

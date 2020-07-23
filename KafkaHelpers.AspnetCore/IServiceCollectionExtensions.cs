@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using KafkaHelpers.DotnetCore.DI;
 using KafkaHelpers.Core.Options;
 using Microsoft.Extensions.Configuration;
+using KafkaHelpers.AspnetCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -21,19 +22,43 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(services));
             }
 
+            services.AddTransient<KafkaHelpersOptionsParser>();
+
             services.AddOptions<KafkaHelpersOptions>()
-                .Configure<IConfiguration>((kho, config) =>
+                .Configure<IConfiguration, KafkaHelpersOptionsParser>((kho, config, khop) =>
                 {
-                    var globalSection = config.GetSection($"KafkaHelpers:{nameof(KafkaHelpersOptions.Configs)}:{nameof(KafkaHelpersConfigsOptions.Global)}");
-                    var values = globalSection.AsEnumerable(makePathsRelative: true);
-                    foreach (var kvp in values)
-                    {
-                        kho.Configs.Global.Set(kvp.Key, kvp.Value);
-                    }
+                    khop.Parse(kho);
                 });
 
             services.TryAddTransient(typeof(IKafkaProducerFactory<>), typeof(KafkaProducerFactory<>));
             services.TryAddSingleton<KafkaProducerManager>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddKafkaProducer<TProducer, TConfiguration>(this IServiceCollection services)
+            where TProducer : AbstractProducer
+            where TConfiguration : ProducerConfig
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            services.AddKafkaHelpers();
+
+            services.AddOptions<TConfiguration>(typeof(TProducer).Name)
+                .Configure<IOptions<KafkaHelpersOptions>>((producerConfig, options) =>
+                {
+                    KafkaHelpersOptions.PopulateProducerConfigs<TProducer>(producerConfig, options.Value);
+                });
+
+            services.TryAddSingleton(sp =>
+            {
+                var manager = sp.GetRequiredService<KafkaProducerManager>();
+
+                return manager.Create<TProducer>();
+            });
 
             return services;
         }
@@ -51,9 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions<ProducerConfig>(typeof(TProducer).Name)
                 .Configure<IOptions<KafkaHelpersOptions>>((producerConfig, options) =>
                 {
-                    var opt = options.Value;
-
-                    KafkaHelpersOptions.CopyValues(source: opt.Configs.Global, destination: producerConfig);
+                    KafkaHelpersOptions.PopulateProducerConfigs<TProducer>(producerConfig, options.Value);
                 });
 
             services.TryAddSingleton(sp =>

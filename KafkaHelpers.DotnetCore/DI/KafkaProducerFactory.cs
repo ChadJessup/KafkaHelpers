@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+﻿using System;
+using Confluent.Kafka;
 using KafkaHelpers.Core.Clients;
 using KafkaHelpers.Core.Options;
 using Microsoft.Extensions.Configuration;
@@ -16,10 +17,11 @@ namespace KafkaHelpers.DotnetCore.DI
 
         public TProducer Create()
         {
-            // 
-            var opt = this.options.Get(typeof(TProducer).Name);
-            opt.Acks = Acks.All;
-            return default;
+            var producerConfig = this.options.Get(typeof(TProducer).Name);
+
+            var producer = (TProducer)Activator.CreateInstance(typeof(TProducer), producerConfig);
+
+            return producer;
         }
     }
 }
